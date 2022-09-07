@@ -133,7 +133,7 @@ def clean_command(
     """
     Clean modules.
 
-    Remove modules that are no longer needed.
+    Remove modules that are no longer needed and their content.
 
     Parameters:
         git             (bool): Use git source control engine.
@@ -184,7 +184,7 @@ def pretty_command(
     Format JSON.
 
     Parameters:
-        files      (list[str]): List of names or aliases.
+        files      (list[str]): List of files.
         check           (bool): Check if files would be formatted.
         keep_order      (bool): Keep order of attributes.
         git             (bool): Use git source control engine.
@@ -213,4 +213,21 @@ def validate_command(
         int: Exit code.
     """
     assert type in ["index", "policy-set", "module"]
+    return 0
+
+
+def download_command(
+    modules: list[str],
+    redownload: bool = False,
+) -> int:
+    """
+    Download module dependencies.
+
+    Parameters:
+        modules (list[str]): List names or aliases.
+        redownload   (bool): Remove and download.
+
+    Returns:
+        int: Exit code.
+    """
     return 0
