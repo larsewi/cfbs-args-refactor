@@ -1,5 +1,5 @@
 """
-cfbs commands
+cfbs commands.
 
 Requirements:
  - These functions should not directly or indirectly depend on each other.
@@ -226,6 +226,26 @@ def download_command(
     Parameters:
         modules (list[str]): List names or aliases.
         redownload   (bool): Remove and download.
+
+    Returns:
+        int: Exit code.
+    """
+    return 0
+
+
+def build_command() -> int:
+    """
+    Build policy set.
+
+    Returns:
+        int: Exit code.
+    """
+    return 0
+
+
+def install_command() -> int:
+    """
+    Install policy set.
 
     Returns:
         int: Exit code.

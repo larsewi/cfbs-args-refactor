@@ -1,3 +1,10 @@
+"""
+Argument parser.
+
+Setup argument parser and link commands to functions in commands.py.
+"""
+
+
 from argparse import ArgumentParser, BooleanOptionalAction
 from typing import Dict
 
@@ -20,6 +27,8 @@ def parse_args() -> Dict:
     _add_pretty_command(subparsers)
     _add_validate_command(subparsers)
     _add_download_command(subparsers)
+    _add_build_command(subparsers)
+    _add_install_command(subparsers)
 
     args = parser.parse_args()
     return args
@@ -29,16 +38,11 @@ def _create_parser():
     parser = ArgumentParser(
         description="CFEngine build argument refactoring demo.",
     )
-    parser.add_argument(
-        "--log",
-        default="info",
-        choices=["critical", "error", "warning", "info", "debug"],
-        help="select log level",
-    )
+    parser.add_argument("--log-debug", action="store_true", help="log debug messages")
     parser.add_argument(
         "--non-interactive",
         action="store_true",
-        help="use default parameters instead of prompts",
+        help="autoselect default parameters when prompted",
     )
     return parser
 
@@ -84,7 +88,7 @@ def _add_init_command(subparsers):
 
 def _add_status_command(subparsers):
     parser = subparsers.add_parser("status", help="print project status")
-    parser.set_defaults(func=lambda _: status_command())
+    parser.set_defaults(func=lambda: status_command())
 
 
 def _add_info_command(subparsers):
@@ -194,8 +198,21 @@ def _add_validate_command(subparsers):
     )
     parser.set_defaults(func=lambda args: validate_command(args.resouce, args.type))
 
+
 def _add_download_command(subparsers):
     parser = subparsers.add_parser("download", help="download module dependencies")
     parser.add_argument("module", nargs="*", help="name or alias of module")
     parser.add_argument("--redownload", action="store_true", help="remove and download")
-    parser.set_defaults(func=lambda args: download_command(args.module, args.redownload))
+    parser.set_defaults(
+        func=lambda args: download_command(args.module, args.redownload)
+    )
+
+
+def _add_build_command(subparsers):
+    parser = subparsers.add_parser("build", help="build policy set")
+    parser.set_defaults(func=lambda: build_command())
+
+
+def _add_install_command(subparsers):
+    parser = subparsers.add_parser("install", help="install policy set")
+    parser.set_defaults(func=lambda: install_command())
