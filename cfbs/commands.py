@@ -6,6 +6,8 @@ Requirements:
  - This file should only contain functions directly related to a subcommand.
 """
 
+from cfbs.utils import is_cfbs_repo, user_error, cfbs_filename
+
 
 def init_command(
     name: str = None,
@@ -33,6 +35,10 @@ def init_command(
     Returns:
         int: Exit code.
     """
+
+    if is_cfbs_repo():
+        user_error("Already initialized - look at %s" % cfbs_filename())
+
     return 0
 
 
