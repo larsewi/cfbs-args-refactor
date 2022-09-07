@@ -2,7 +2,8 @@
 cfbs commands
 
 Requirements:
- - These functions should not depend on each other.
+ - These functions should not directly or indirectly depend on each other.
+ - This file should only contain functions directly related to a subcommand.
 """
 
 
@@ -45,13 +46,13 @@ def status_command() -> int:
     return 0
 
 
-def info_command(module: list[str], index: str = None) -> int:
+def info_command(modules: list[str], index: str = None) -> int:
     """
     Print module info.
 
     Parameters:
-        module (str): Module name or alias.
-        index  (str): Specify index.
+        modules (str): Module name or alias.
+        index   (str): Specify index.
 
     Returns:
         int: Exit code.
@@ -59,21 +60,113 @@ def info_command(module: list[str], index: str = None) -> int:
     return 0
 
 
-def search_command(module, index):
+def search_command(terms: list[str], index: str = None) -> int:
+    """
+    Search for modules.
+
+    Should support shell-style wildcards (E.g. '*?')?
+
+    Parameters:
+        terms (list[str]): List of module names or aliases.
+        index       (str): Specify index.
+
+    Returns:
+        int: Exit code.
+    """
     return 0
 
 
-def add_command(ctx):
+def add_command(
+    modules: list[str],
+    index: str = None,
+    git: bool = None,
+    git_user_name: str = None,
+    git_user_email: str = None,
+    non_interactive: bool = False,
+) -> int:
+    """
+    Add modules.
+
+    Parameters:
+        modules    (list[str]): List of names or aliases.
+        index            (str): Specify index.
+        git             (bool): Use git source control engine.
+        git_user_name    (str): Specify git user name.
+        git_user_email   (str): Specify git user email.
+        non_interactive (bool): Use default parameters instead of prompts.
+
+    Returns:
+        int: Exit code.
+    """
     return 0
 
 
-def remove_command(ctx):
+def remove_command(
+    modules: list[str],
+    git: bool = None,
+    git_user_name: str = None,
+    git_user_email: str = None,
+    non_interactive: bool = False,
+):
+    """
+    Remove modules.
+
+    Parameters:
+        modules    (list[str]): List of names or aliases.
+        git             (bool): Use git source control engine.
+        git_user_name    (str): Specify git user name.
+        git_user_email   (str): Specify git user email.
+        non_interactive (bool): Use default parameters instead of prompts.
+
+    Returns:
+        int: Exit code.
+    """
     return 0
 
 
-def clean_command(ctx):
+def clean_command(
+    git: bool = None,
+    git_user_name: str = None,
+    git_user_email: str = None,
+    non_interactive: bool = False,
+):
+    """
+    Clean modules.
+
+    Remove modules that are no longer needed.
+
+    Parameters:
+        git             (bool): Use git source control engine.
+        git_user_name    (str): Specify git user name.
+        git_user_email   (str): Specify git user email.
+        non_interactive (bool): Use default parameters instead of prompts.
+
+    Returns:
+        int: Exit code.
+    """
     return 0
 
 
-def update_command(ctx):
+def update_command(
+    modules: list[str],
+    index: str = None,
+    git: bool = None,
+    git_user_name: str = None,
+    git_user_email: str = None,
+    non_interactive: bool = False,
+):
+    """
+    Add modules.
+
+    Parameters:
+        modules    (list[str]): List of names or aliases.
+        index            (str): Specify index.
+        git             (bool): Use git source control engine.
+        git_user_name    (str): Specify git user name.
+        git_user_email   (str): Specify git user email.
+        non_interactive (bool): Use default parameters instead of prompts.
+
+    Returns:
+        int: Exit code.
+    """
     return 0
