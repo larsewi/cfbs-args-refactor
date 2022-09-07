@@ -111,7 +111,7 @@ def _search_subcommand(subparsers):
 
 def _add_subcommand(subparsers):
     parser = subparsers.add_parser("add", help="add modules")
-    parser.add_argument("module", nargs="+", help="name or alias of module to add")
+    parser.add_argument("module", nargs="+", help="name or alias of module")
     _index_arguments(parser)
     _git_arguments(parser)
     parser.set_defaults(
@@ -128,7 +128,7 @@ def _add_subcommand(subparsers):
 
 def _remove_subcommand(subparsers):
     parser = subparsers.add_parser("remove", help="remove modules")
-    parser.add_argument("module", nargs="+", help="name or alias of module to remove")
+    parser.add_argument("module", nargs="+", help="name or alias of module")
     _git_arguments(parser)
     parser.set_defaults(
         func=lambda args: remove_command(
@@ -158,7 +158,7 @@ def _clean_subcommand(subparsers):
 
 def _update_subcommand(subparsers):
     parser = subparsers.add_parser("update", help="update modules")
-    parser.add_argument("", nargs="+", help="name/alias of module to update")
+    parser.add_argument("", nargs="+", help="name or alias of module")
     _index_arguments(parser)
     _git_arguments(parser)
     parser.set_defaults(
