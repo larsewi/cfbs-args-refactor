@@ -60,6 +60,10 @@ def _add_module_arguments(parser):
     parser.add_argument("module", nargs="+", help="name or alias of module")
 
 
+def _add_file_arguments(parser):
+    parser.add_argument("file", narg="+", help="path to file")
+
+
 # --- Subparsers ---
 
 
@@ -170,10 +174,14 @@ def _update_subcommand(subparsers):
 
 
 def _pretty_subcommand(subparsers):
-    parser = subparsers.add_parser("pretty", help="format JSON file")
-    parser.add_argument("file", narg="+", help="path to JSON file")
-    parser.add_argument("--check", action="store_true", help="check if files would be formatted")
-    parser.add_argument("--keep-order", action="store_true", help="keep order of attributes")
+    parser = subparsers.add_parser("pretty", help="format JSON files")
+    _add_file_arguments(parser)
+    parser.add_argument(
+        "--check", action="store_true", help="check if files would be formatted"
+    )
+    parser.add_argument(
+        "--keep-order", action="store_true", help="keep order of attributes"
+    )
     _add_git_arguments(parser)
     parser.set_defaults(
         func=lambda args: pretty_command(
@@ -186,3 +194,12 @@ def _pretty_subcommand(subparsers):
             args.non_interactive,
         )
     )
+
+
+def _validate_subcommand(subparsers):
+    parser = subparsers.add_parser("validate", help="validate cfbs resources")
+    parser.add_argument("resource", help="resource path or URL")
+    parser.add_argument(
+        "--type", required=True, choices=["index", "policy-set", "module"]
+    )
+    parser.set_defaults(func=lambda args: validate_command(args.resouce, args.type))

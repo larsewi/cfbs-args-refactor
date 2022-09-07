@@ -107,7 +107,7 @@ def remove_command(
     git_user_name: str = None,
     git_user_email: str = None,
     non_interactive: bool = False,
-):
+) -> int:
     """
     Remove modules.
 
@@ -129,7 +129,7 @@ def clean_command(
     git_user_name: str = None,
     git_user_email: str = None,
     non_interactive: bool = False,
-):
+) -> int:
     """
     Clean modules.
 
@@ -154,7 +154,7 @@ def update_command(
     git_user_name: str = None,
     git_user_email: str = None,
     non_interactive: bool = False,
-):
+) -> int:
     """
     Add modules.
 
@@ -179,7 +179,7 @@ def pretty_command(
     git: bool = None,
     git_user_name: str = None,
     git_user_email: str = None,
-):
+) -> int:
     """
     Format JSON.
 
@@ -195,3 +195,22 @@ def pretty_command(
     Returns:
         int: Exit code.
     """
+    return 0
+
+
+def validate_command(
+    resources: list[str],
+    type: str,
+) -> int:
+    """
+    Validate index.
+
+    Parameters:
+        resources (list[str]): List paths or URLs.
+        type            (str): Resource type.
+
+    Returns:
+        int: Exit code.
+    """
+    assert type in ["index", "policy-set", "module"]
+    return 0
