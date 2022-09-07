@@ -1,61 +1,79 @@
-import time
-import logging as log
+"""
+cfbs commands
 
-from cfbs.context import Context
-
-
-def command_wapper(func):
-    def inner(args):
-        begin = time.time()
-        log.debug("Begin '%s'" % func.__name__)
-
-        ctx = Context(args)
-        exit_status = func(ctx)
-        assert isinstance(exit_status, int)
-        if exit_status == 0:
-            ctx.config.save()
-            if ctx.commit:
-                log.debug("Performing 'git add %s'" % ctx.files.join(" "))
-                log.debug("Performing 'git commit'")
-            exit_status = 0
-
-        log.debug("End '%s'" % func.__name__)
-        log.debug("Execution time: %f s" % (time.time() - begin))
-        log.debug("Exit status: %d" % exit_status)
-
-        return exit_status
-    return inner
+Requirements:
+ - These functions should not depend on each other.
+"""
 
 
-@command_wapper
-def init_command(ctx):
+def init_command(
+    name: str = None,
+    description: str = None,
+    index: str = None,
+    masterfiles: bool = None,
+    git: bool = None,
+    git_user_name: str = None,
+    git_user_email: str = None,
+    non_interactive: bool = False,
+) -> int:
+    """
+    Initialize a cfbs project.
+
+    Parameters:
+        name             (str): Specify project name.
+        description      (str): Specify project description.
+        index            (str): Specify index.
+        masterfiles     (bool): Use default masterfiles policy framework.
+        git             (bool): Use git source control engine.
+        git_user_name    (str): Specify git user name.
+        git_user_email   (str): Specify git user email.
+        non_interactive (bool): Use default parameters instead of prompts.
+
+    Returns:
+        int: Exit code.
+    """
     return 0
 
 
-@command_wapper
-def status_command(ctx):
+def status_command() -> int:
+    """
+    Print project status.
+
+    Returns:
+        int: Exit code.
+    """
     return 0
 
 
-@command_wapper
-def search_command(ctx):
+def info_command(module: list[str], index: str = None) -> int:
+    """
+    Print module info.
+
+    Parameters:
+        module (str): Module name or alias.
+        index  (str): Specify index.
+
+    Returns:
+        int: Exit code.
+    """
     return 0
 
 
-@command_wapper
+def search_command(module, index):
+    return 0
+
+
 def add_command(ctx):
     return 0
 
 
-@command_wapper
 def remove_command(ctx):
     return 0
 
 
-@command_wapper
 def clean_command(ctx):
     return 0
 
-@command_wapper
+
 def update_command(ctx):
     return 0

@@ -1,15 +1,7 @@
 from argparse import ArgumentParser, BooleanOptionalAction
 from typing import Dict
 
-from cfbs.commands import (
-    init_command,
-    status_command,
-    search_command,
-    add_command,
-    remove_command,
-    clean_command,
-    update_command,
-)
+from cfbs.commands import *
 
 
 def parse_args() -> Dict:
@@ -18,6 +10,7 @@ def parse_args() -> Dict:
     subparsers = main_parser.add_subparsers(title="subcommands")
     _init_subparser(subparsers)
     _status_subparser(subparsers)
+    _info_subparser(subparsers)
     _search_subparser(subparsers)
     _add_subparser(subparsers)
     _remove_subparser(subparsers)
@@ -38,6 +31,11 @@ def _main_parser():
         default="info",
         choices=["critical", "error", "warning", "info", "debug"],
         help="select log level",
+    )
+    parser.add_argument(
+        "--non-interactive",
+        default=False,
+        help="use default parameters instead of prompts",
     )
     return parser
 
@@ -64,14 +62,43 @@ def _init_subparser(subparsers):
     parser = subparsers.add_parser("init", help="initialize a cfbs project")
     parser.add_argument("--name", help="specify project name")
     parser.add_argument("--description", help="specify project description")
+    parser.add_argument(
+        "--masterfiles",
+        action=BooleanOptionalAction,
+        help="add default masterfiles policy framework",
+    )
     _index_arguments(parser)
     _git_arguments(parser)
-    parser.set_defaults(func=init_command)
+    parser.set_defaults(
+        func=lambda args: init_command(
+            args.name,
+            args.description,
+            args.index,
+            args.masterfiles,
+            args.git,
+            args.git_user_name,
+            args.git_user_email,
+            args.non_interactive,
+        )
+    )
 
 
 def _status_subparser(subparsers):
     parser = subparsers.add_parser("status", help="print project status")
-    parser.set_defaults(func=status_command)
+    parser.set_defaults(func=lambda _: status_command())
+
+
+def _info_subparser(subparsers):
+    parser = subparsers.add_parser(
+        "info", aliases=["show"], help="print project status"
+    )
+    parser.add_arugment(
+        "module",
+        nargs="+",
+        help="module name or alias",
+    )
+    _index_arguments(parser)
+    parser.set_defaults(func=lambda args: info_command(args.module, args.index))
 
 
 def _search_subparser(subparsers):

@@ -11,5 +11,5 @@ def setup_logger(args):
 def main():
     args = parse_args()
     setup_logger(args)
-    exit_status = args.func(args)
-    return exit_status
+    args.func(args)
+    return 0

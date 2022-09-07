@@ -4,6 +4,7 @@ _DEFAULT_INDEX = (
     "https://raw.githubusercontent.com/cfengine/build-index/master/cfbs.json"
 )
 
+
 class Index:
     def __init__(self, index):
         if index:
