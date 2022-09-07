@@ -25,7 +25,6 @@ def parse_args() -> Dict:
 def _create_parser():
     parser = ArgumentParser(
         description="CFEngine build argument refactoring demo.",
-        epilog="Use 'cfbs help -a' to list available low-level commands.",
     )
     parser.add_argument(
         "--log",
@@ -35,7 +34,7 @@ def _create_parser():
     )
     parser.add_argument(
         "--non-interactive",
-        default=False,
+        action="store_true",
         help="use default parameters instead of prompts",
     )
     return parser
@@ -56,11 +55,15 @@ def _index_arguments(parser):
     parser.add_argument("--index", help="specify index")
 
 
+def _module_arguments(parser):
+    parser.add_argument("module", nargs="+", help="name or alias of module")
+
+
 # --- Subparsers ---
 
 
 def _init_subcommand(subparsers):
-    parser = subparsers.add_parser("init", help="initialize a cfbs project")
+    parser = subparsers.add_parser("init", help="initialize project")
     parser.add_argument("--name", help="specify project name")
     parser.add_argument("--description", help="specify project description")
     parser.add_argument(
@@ -90,10 +93,8 @@ def _status_subcommand(subparsers):
 
 
 def _info_subcommand(subparsers):
-    parser = subparsers.add_parser(
-        "info", aliases=["show"], help="print project status"
-    )
-    parser.add_arugment(
+    parser = subparsers.add_parser("info", aliases=["show"], help="print module info")
+    parser.add_argument(
         "module",
         nargs="+",
         help="module name or alias",
@@ -111,7 +112,7 @@ def _search_subcommand(subparsers):
 
 def _add_subcommand(subparsers):
     parser = subparsers.add_parser("add", help="add modules")
-    parser.add_argument("module", nargs="+", help="name or alias of module")
+    _module_arguments(parser)
     _index_arguments(parser)
     _git_arguments(parser)
     parser.set_defaults(
@@ -128,7 +129,7 @@ def _add_subcommand(subparsers):
 
 def _remove_subcommand(subparsers):
     parser = subparsers.add_parser("remove", help="remove modules")
-    parser.add_argument("module", nargs="+", help="name or alias of module")
+    _module_arguments(parser)
     _git_arguments(parser)
     parser.set_defaults(
         func=lambda args: remove_command(
@@ -142,9 +143,7 @@ def _remove_subcommand(subparsers):
 
 
 def _clean_subcommand(subparsers):
-    parser = subparsers.add_parser(
-        "clean", help="remove modules that are no longer needed"
-    )
+    parser = subparsers.add_parser("clean", help="clean project")
     _git_arguments(parser)
     parser.set_defaults(
         func=lambda args: clean_command(
@@ -158,7 +157,7 @@ def _clean_subcommand(subparsers):
 
 def _update_subcommand(subparsers):
     parser = subparsers.add_parser("update", help="update modules")
-    parser.add_argument("", nargs="+", help="name or alias of module")
+    _module_arguments(parser)
     _index_arguments(parser)
     _git_arguments(parser)
     parser.set_defaults(
