@@ -17,6 +17,7 @@ def parse_args() -> Dict:
     _remove_subcommand(subparsers)
     _clean_subcommand(subparsers)
     _update_subcommand(subparsers)
+    _pretty_subcommand(subparsers)
 
     args = parser.parse_args()
     return args
@@ -43,7 +44,7 @@ def _create_parser():
 # --- Arguments ---
 
 
-def _git_arguments(parser):
+def _add_git_arguments(parser):
     parser.add_argument(
         "--git", action=BooleanOptionalAction, help="use the git source control engine"
     )
@@ -51,11 +52,11 @@ def _git_arguments(parser):
     parser.add_argument("--git-user-email", help="specify git user email")
 
 
-def _index_arguments(parser):
+def _add_index_arguments(parser):
     parser.add_argument("--index", help="specify index")
 
 
-def _module_arguments(parser):
+def _add_module_arguments(parser):
     parser.add_argument("module", nargs="+", help="name or alias of module")
 
 
@@ -71,8 +72,8 @@ def _init_subcommand(subparsers):
         action=BooleanOptionalAction,
         help="add default masterfiles policy framework",
     )
-    _index_arguments(parser)
-    _git_arguments(parser)
+    _add_index_arguments(parser)
+    _add_git_arguments(parser)
     parser.set_defaults(
         func=lambda args: init_command(
             args.name,
@@ -94,27 +95,23 @@ def _status_subcommand(subparsers):
 
 def _info_subcommand(subparsers):
     parser = subparsers.add_parser("info", aliases=["show"], help="print module info")
-    parser.add_argument(
-        "module",
-        nargs="+",
-        help="module name or alias",
-    )
-    _index_arguments(parser)
+    _add_module_arguments(parser)
+    _add_index_arguments(parser)
     parser.set_defaults(func=lambda args: info_command(args.module, args.index))
 
 
 def _search_subcommand(subparsers):
     parser = subparsers.add_parser("search", help="search for modules")
     parser.add_argument("term", nargs="+", help="partial module name or alias")
-    _index_arguments(parser)
+    _add_index_arguments(parser)
     parser.set_defaults(func=lambda args: search_command(args.term, args.index))
 
 
 def _add_subcommand(subparsers):
     parser = subparsers.add_parser("add", help="add modules")
-    _module_arguments(parser)
-    _index_arguments(parser)
-    _git_arguments(parser)
+    _add_module_arguments(parser)
+    _add_index_arguments(parser)
+    _add_git_arguments(parser)
     parser.set_defaults(
         func=lambda args: add_command(
             args.module,
@@ -129,8 +126,8 @@ def _add_subcommand(subparsers):
 
 def _remove_subcommand(subparsers):
     parser = subparsers.add_parser("remove", help="remove modules")
-    _module_arguments(parser)
-    _git_arguments(parser)
+    _add_module_arguments(parser)
+    _add_git_arguments(parser)
     parser.set_defaults(
         func=lambda args: remove_command(
             args.module,
@@ -144,7 +141,7 @@ def _remove_subcommand(subparsers):
 
 def _clean_subcommand(subparsers):
     parser = subparsers.add_parser("clean", help="clean project")
-    _git_arguments(parser)
+    _add_git_arguments(parser)
     parser.set_defaults(
         func=lambda args: clean_command(
             args.git,
@@ -157,13 +154,32 @@ def _clean_subcommand(subparsers):
 
 def _update_subcommand(subparsers):
     parser = subparsers.add_parser("update", help="update modules")
-    _module_arguments(parser)
-    _index_arguments(parser)
-    _git_arguments(parser)
+    _add_module_arguments(parser)
+    _add_index_arguments(parser)
+    _add_git_arguments(parser)
     parser.set_defaults(
         func=lambda args: update_command(
             args.module,
             args.index,
+            args.git,
+            args.git_user_name,
+            args.git_user_email,
+            args.non_interactive,
+        )
+    )
+
+
+def _pretty_subcommand(subparsers):
+    parser = subparsers.add_parser("pretty", help="format JSON file")
+    parser.add_argument("file", narg="+", help="path to JSON file")
+    parser.add_argument("--check", action="store_true", help="check if files would be formatted")
+    parser.add_argument("--keep-order", action="store_true", help="keep order of attributes")
+    _add_git_arguments(parser)
+    parser.set_defaults(
+        func=lambda args: pretty_command(
+            args.file,
+            args.check,
+            args.keep_order,
             args.git,
             args.git_user_name,
             args.git_user_email,

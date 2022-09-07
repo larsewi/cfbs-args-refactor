@@ -170,3 +170,28 @@ def update_command(
         int: Exit code.
     """
     return 0
+
+
+def pretty_command(
+    files: list[str],
+    check: bool = False,
+    keep_order: bool = False,
+    git: bool = None,
+    git_user_name: str = None,
+    git_user_email: str = None,
+):
+    """
+    Format JSON.
+
+    Parameters:
+        files      (list[str]): List of names or aliases.
+        check           (bool): Check if files would be formatted.
+        keep_order      (bool): Keep order of attributes.
+        git             (bool): Use git source control engine.
+        git_user_name    (str): Specify git user name.
+        git_user_email   (str): Specify git user email.
+        non_interactive (bool): Use default parameters instead of prompts.
+
+    Returns:
+        int: Exit code.
+    """
