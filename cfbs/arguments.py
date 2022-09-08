@@ -9,6 +9,7 @@ from argparse import ArgumentParser, BooleanOptionalAction
 from typing import Dict
 
 from cfbs.commands import *
+from cfbs.cfbs_json import CFBS_JSON_PROJECT_TYPES
 
 
 def parse_args() -> Dict:
@@ -193,9 +194,7 @@ def _add_pretty_command(subparsers):
 def _add_validate_command(subparsers):
     parser = subparsers.add_parser("validate", help="validate cfbs resources")
     parser.add_argument("resource", help="resource path or URL")
-    parser.add_argument(
-        "--type", required=True, choices=["index", "policy-set", "module"]
-    )
+    parser.add_argument("--type", required=True, choices=CFBS_JSON_PROJECT_TYPES)
     parser.set_defaults(func=lambda args: validate_command(args.resouce, args.type))
 
 

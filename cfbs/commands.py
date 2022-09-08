@@ -6,6 +6,7 @@ Requirements:
  - This file should only contain functions directly related to a subcommand.
 """
 
+from cfbs.cfbs_json import CFBS_JSON_PROJECT_TYPES
 from cfbs.utils import is_cfbs_repo, user_error, cfbs_filename
 
 
@@ -218,7 +219,7 @@ def validate_command(
     Returns:
         int: Exit code.
     """
-    assert type in ["index", "policy-set", "module"]
+    assert type in CFBS_JSON_PROJECT_TYPES
     return 0
 
 
